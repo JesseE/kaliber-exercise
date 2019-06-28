@@ -1,0 +1,17 @@
+# vendor packages
+node_modules
+
+# project meta
+.idea
+.settings
+*.sublime-project
+*.sublime-workspace
+
+# npm
+npm-debug.log
+
+# cupertino
+.DS_Store
+
+/dist
+.history
