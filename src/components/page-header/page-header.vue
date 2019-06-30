@@ -8,7 +8,7 @@
 export default {
   data() {
     return {
-      image: '../../images/bastien-grivet-on-my-way.jpg'
+      image: 'https://cdna.artstation.com/p/assets/images/images/003/968/290/large/bastien-grivet-on-my-way.jpg?1479040529'
     }
   }
 }
