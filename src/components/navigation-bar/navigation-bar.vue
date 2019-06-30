@@ -61,23 +61,28 @@ export default {
       menuOpened: false,
       isHamburger: false,
       xPositionNav: 0,
+      pageMargin: 0,
     }
   },
   created () {
-    if(!window.innerWidth <= 675) {
-      window.addEventListener('scroll', this.handleScroll, true);
-    }
+    window.addEventListener('scroll', this.handleScroll, true);
   },
   mounted() {
     this.setPositionNav()
     window.addEventListener('resize', () => {
       this.setPositionNav()
+
       if(window.innerWidth <= 675) {
         this.navToHamburger();
         this.hideNavLinks();
       } else {
         this.navToFullWidth();
         this.showNavLinks();
+      }
+
+      if(window.innerWidth > 1440) {
+        const pageWidth = document.getElementsByTagName('html')[0].offsetWidth - 1440
+        this.pageMargin = pageWidth / 2
       }
     })
   },
@@ -93,7 +98,7 @@ export default {
       this.isHamburger = false
       TweenLite.to(this.$refs.nav, 0.3, {
         top: "0px",
-        left: "0px",
+        left: "",
         right: "",
         width: "100%",
         height: "100px",
@@ -114,11 +119,12 @@ export default {
     navToHamburger() {
       this.isHamburger = true
 
+
       TweenLite.to(this.$refs.nav, 0.3, {
         top: "10px",
         marginLeft: 0,
         marginRight: 0,
-        left: this.xPositionNav - 85,
+        left: this.xPositionNav - 85 + this.pageMargin,
         right: "",
         width: "75px",
         height: "75px"
