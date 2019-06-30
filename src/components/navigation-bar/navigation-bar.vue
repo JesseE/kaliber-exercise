@@ -1,16 +1,21 @@
 <template>
-  <header class="nav-container" ref='nav' @click="openMenu">
+  <header class="nav-container"
+          ref='nav' @click="openMenu">
     <nav class="nav">
-      <ul class="nav__list" ref="navList">
+      <ul class="nav__list"
+          :class="{ 'nav__list--column' : menuIsOpen }"
+          ref="navList">
         <li class="nav__list-item"
+          :class="{ 'nav__list-item--no-margin' : menuIsOpen}"
             v-for="link in links"
-            :key="link.title">
+            :key="link.title"
+            ref="navListItem">
           <router-link class="nav__list-link" :to="link.target">
             <span class="nav__list-text">{{link.title}}</span>
           </router-link>
         </li>
       </ul>
-      <div  class="nav-hamburger">
+      <div class="nav-hamburger">
         <HamburgerIcon ref="navHamburger"/>
       </div>
     </nav>
@@ -58,8 +63,7 @@ export default {
         }
       ],
       scrollPosition: 0,
-      menuOpened: false,
-      isHamburger: false,
+      menuIsOpen: false,
       xPositionNav: 0,
       pageMargin: 0,
     }
@@ -91,19 +95,36 @@ export default {
   },
   methods: {
     openMenu() {
-      this.navToFullWidth()
+      let height
+      let isClicked
+
+      if (window.innerWidth < 675) {
+        height = "100vh"
+        this.menuIsOpen = true;
+      } else {
+        height = "65px"
+      }
+
+      this.navToFullWidth(height, isClicked=true)
       this.showNavLinks()
+      this.showNavListItems()
     },
-    navToFullWidth() {
-      this.isHamburger = false
+    showNavListItems() {
+      TweenLite.to(this.$refs.navListItem, 0.3, {
+        display:'flex',
+      })
+    },
+    navToFullWidth(height, isClicked) {
+      (!isClicked) ? this.menuIsOpen = false : null
       TweenLite.to(this.$refs.nav, 0.3, {
         top: "0px",
         left: "",
         right: "",
         width: "100%",
-        height: "100px",
+        height: height,
         marginLeft: "auto",
         marginRight: "auto",
+        background: "black",
         onComplete: function() {
           this.setPositionNav()
         }.bind(this)
@@ -111,23 +132,22 @@ export default {
 
       TweenLite.to(this.$refs.navHamburger, 0.1, {
         opacity: 0,
+        display: "none"
       })
     },
     setPositionNav() {
       this.xPositionNav = this.$refs.nav.offsetWidth
     },
     navToHamburger() {
-      this.isHamburger = true
-
-
       TweenLite.to(this.$refs.nav, 0.3, {
         top: "10px",
         marginLeft: 0,
         marginRight: 0,
         left: this.xPositionNav - 85 + this.pageMargin,
         right: "",
-        width: "75px",
-        height: "75px"
+        width: "65px",
+        height: "65px",
+        background: "black"
       })
 
       TweenLite.to(this.$refs.navHamburger, 0.3, {
