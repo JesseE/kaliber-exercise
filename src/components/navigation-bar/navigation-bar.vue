@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import debounce from '../../lib/debounce'
 import HamburgerIcon from '../../images/menu.svg'
 import { TweenLite } from 'gsap'
 
@@ -78,8 +79,32 @@ export default {
   },
   mounted() {
     this.setPositionNav()
+    window.addEventListener('resize', debounce(this.handleResize, 300))
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    openMenu() {
+      const isClicked = true
 
-    window.addEventListener('resize', () => {
+      if (window.innerWidth < 675) {
+        this.navBarHeight = "100vh"
+        this.menuIsOpen = true;
+      }
+
+      this.navToFullWidth(isClicked)
+      this.showNavLinks()
+      this.showNavListItems()
+    },
+    showNavListItems() {
+      TweenLite.to(
+        this.$refs.navListItem,
+        this.normalAnimationSpeed, { display:'flex' }
+      )
+    },
+    handleResize() {
       this.setPositionNav()
 
       if(window.innerWidth <= 675) {
@@ -89,81 +114,6 @@ export default {
         this.navToFullWidth();
         this.showNavLinks();
       }
-    })
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll);
-  },
-  methods: {
-    openMenu() {
-      let isClicked
-
-      if (window.innerWidth < 675) {
-        this.navBarHeight = "100vh"
-        this.menuIsOpen = true;
-      }
-
-      this.navToFullWidth(isClicked = true)
-      this.showNavLinks()
-      this.showNavListItems()
-    },
-    showNavListItems() {
-      TweenLite.to(this.$refs.navListItem, this.normalAnimationSpeed, {
-        display:'flex',
-      })
-    },
-    navToFullWidth(isClicked) {
-      (!isClicked) ? this.menuIsOpen = false : null
-
-      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
-        top: "0px",
-        left: 0,
-        right: 0,
-
-        width: "100%",
-        height: this.navBarHeight,
-        marginLeft: "auto",
-        marginRight: "auto",
-        onComplete: function() {
-          this.setPositionNav()
-        }.bind(this)
-      })
-
-      TweenLite.to(this.$refs.navHamburger, 0.1, {
-        opacity: 0,
-        display: "none"
-      })
-    },
-    setPositionNav() {
-      this.xPositionNav = this.$refs.nav.offsetWidth
-    },
-    navToHamburger() {
-      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
-        top: "10px",
-        marginLeft: 0,
-        marginRight: 0,
-        left: this.xPositionNav - 85 + this.pageMargin,
-        right: "",
-        width: "65px",
-        height: "65px",
-      })
-
-      TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
-        opacity: 1,
-        display: "block"
-      })
-    },
-    hideNavLinks() {
-      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
-        opacity: 0,
-        display: "none"
-      })
-    },
-    showNavLinks() {
-      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
-        opacity: 1,
-        display: "flex"
-      })
     },
     handleScroll () {
       if(window.innerWidth > 1440) {
@@ -184,6 +134,62 @@ export default {
       }
 
       this.scrollPosition = window.scrollY
+    },
+    navToFullWidth(isClicked) {
+      (!isClicked) ? this.menuIsOpen = false : null
+
+      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
+        top: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        height: this.navBarHeight,
+        marginLeft: "auto",
+        marginRight: "auto",
+        onComplete: function() {
+          this.setPositionNav()
+        }.bind(this)
+      })
+
+      TweenLite.to(
+        this.$refs.navHamburger,
+        0.1,
+        { opacity: 0, display: "none" }
+      )
+    },
+    setPositionNav() {
+      this.xPositionNav = this.$refs.nav.offsetWidth
+    },
+    navToHamburger() {
+      let leftOffset
+      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
+        top: 10,
+        marginLeft: 0,
+        marginRight: 0,
+        left: (window.innerWidth > 1440)
+          ? leftOffset = (this.xPositionNav - 75) + this.pageMargin
+          : leftOffset = "",
+        right: 10,
+        width: 65,
+        height: 65,
+      })
+
+      TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
+        opacity: 1,
+        display: "block"
+      })
+    },
+    hideNavLinks() {
+      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
+        opacity: 0,
+        display: "none"
+      })
+    },
+    showNavLinks() {
+      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
+        opacity: 1,
+        display: "flex"
+      })
     }
   }
 }
