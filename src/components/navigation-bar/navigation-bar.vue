@@ -1,12 +1,14 @@
 <template>
-  <header class="nav-container"
-          ref='nav' @click="openMenu">
+  <header
+    class="nav-container"
+    ref='nav'
+    @click="openMenu">
     <nav class="nav">
       <ul class="nav__list"
           :class="{ 'nav__list--column' : menuIsOpen }"
           ref="navList">
         <li class="nav__list-item"
-          :class="{ 'nav__list-item--no-margin' : menuIsOpen}"
+          :class="{ 'nav__list-item--no-margin' : menuIsOpen }"
             v-for="link in links"
             :key="link.title"
             ref="navListItem">
@@ -85,7 +87,8 @@ export default {
       }
 
       if(window.innerWidth > 1440) {
-        const pageWidth = document.getElementsByTagName('html')[0].offsetWidth - 1440
+        const pageWidth =
+          document.getElementsByTagName('html')[0].offsetWidth - 1440
         this.pageMargin = pageWidth / 2
       }
     })
