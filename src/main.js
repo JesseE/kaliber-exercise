@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 const routes = [
   {
     path: '/',
-    component: () => import ('./components/navigation-bar/navigation-bar.vue')
+    component: () => import ('./pages/home.vue')
   }
 ]
 
