@@ -68,6 +68,9 @@ export default {
       menuIsOpen: false,
       xPositionNav: 0,
       pageMargin: 0,
+      navBarHeight: 65,
+      normalAnimationSpeed: 0.3,
+      fastAnimationSpeed: 0.2
     }
   },
   created () {
@@ -75,6 +78,7 @@ export default {
   },
   mounted() {
     this.setPositionNav()
+
     window.addEventListener('resize', () => {
       this.setPositionNav()
 
@@ -85,12 +89,6 @@ export default {
         this.navToFullWidth();
         this.showNavLinks();
       }
-
-      if(window.innerWidth > 1440) {
-        const pageWidth =
-          document.getElementsByTagName('html')[0].offsetWidth - 1440
-        this.pageMargin = pageWidth / 2
-      }
     })
   },
   destroyed () {
@@ -98,36 +96,34 @@ export default {
   },
   methods: {
     openMenu() {
-      let height
       let isClicked
 
       if (window.innerWidth < 675) {
-        height = "100vh"
+        this.navBarHeight = "100vh"
         this.menuIsOpen = true;
-      } else {
-        height = "65px"
       }
 
-      this.navToFullWidth(height, isClicked=true)
+      this.navToFullWidth(isClicked = true)
       this.showNavLinks()
       this.showNavListItems()
     },
     showNavListItems() {
-      TweenLite.to(this.$refs.navListItem, 0.3, {
+      TweenLite.to(this.$refs.navListItem, this.normalAnimationSpeed, {
         display:'flex',
       })
     },
-    navToFullWidth(height, isClicked) {
+    navToFullWidth(isClicked) {
       (!isClicked) ? this.menuIsOpen = false : null
-      TweenLite.to(this.$refs.nav, 0.3, {
+
+      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
         top: "0px",
-        left: "",
-        right: "",
+        left: 0,
+        right: 0,
+
         width: "100%",
-        height: height,
+        height: this.navBarHeight,
         marginLeft: "auto",
         marginRight: "auto",
-        background: "black",
         onComplete: function() {
           this.setPositionNav()
         }.bind(this)
@@ -142,7 +138,7 @@ export default {
       this.xPositionNav = this.$refs.nav.offsetWidth
     },
     navToHamburger() {
-      TweenLite.to(this.$refs.nav, 0.3, {
+      TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
         top: "10px",
         marginLeft: 0,
         marginRight: 0,
@@ -150,27 +146,33 @@ export default {
         right: "",
         width: "65px",
         height: "65px",
-        background: "black"
       })
 
-      TweenLite.to(this.$refs.navHamburger, 0.3, {
+      TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
         opacity: 1,
         display: "block"
       })
     },
     hideNavLinks() {
-      TweenLite.to(this.$refs.navList, 0.2, {
+      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
         opacity: 0,
         display: "none"
       })
     },
     showNavLinks() {
-      TweenLite.to(this.$refs.navList, 0.2, {
+      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
         opacity: 1,
         display: "flex"
       })
     },
     handleScroll () {
+      if(window.innerWidth > 1440) {
+        const bodyElWidth = document.getElementsByTagName('body')[0].offsetWidth
+        const htmlElWidth = document.getElementsByTagName('html')[0].offsetWidth
+        const pageWidth = htmlElWidth - bodyElWidth
+        this.pageMargin = pageWidth / 2
+      }
+
       const scrollTarget = document.querySelector('[data-text-block]')
 
       if(window.scrollY < this.scrollPosition) {
