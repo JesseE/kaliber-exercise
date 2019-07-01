@@ -1,5 +1,21 @@
 @import (once) "../../styles/variables.less";
 
+.page-logo {
+  margin: 20px;
+  height: auto;
+  position: fixed;
+  z-index: 1;
+  line-height: 1rem;
+
+  a {
+    text-decoration: none;
+    color: @white;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
+}
+
 .nav {
   width: 100%;
   height: 100%;
@@ -47,6 +63,7 @@
   padding-left: 0;
   margin: 0;
   width: 100%;
+  justify-content: flex-end;
 }
 
 .nav__list--column {
@@ -58,18 +75,18 @@
   }
 }
 
-.nav__list-item:first-child {
-  margin-right: auto;
-  margin-left: @spacing-m;
-  display: flex;
-}
+// .nav__list-item:first-child {
+//   margin-right: auto;
+//   margin-left: @spacing-m;
+//   display: flex;
+// }
 
-.nav__list-item:first-child >
-.nav__list-link >
-.nav__list-text {
-  font-size: @font-size-l;
-  line-height: 0.75rem;
-}
+// .nav__list-item:first-child >
+// .nav__list-link >
+// .nav__list-text {
+//   font-size: @font-size-l;
+//   line-height: 0.75rem;
+// }
 
 .nav__list-item.nav__list-item--no-margin {
   margin-left: 0;

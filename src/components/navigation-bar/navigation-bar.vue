@@ -1,33 +1,41 @@
 <template>
-  <header
-    class="nav-container"
-    ref='nav'
-    @click="openMenu">
-    <nav class="nav">
-      <ul class="nav__list"
-          :class="{ 'nav__list--column' : menuIsOpen }"
-          ref="navList">
-        <li class="nav__list-item"
-          :class="{ 'nav__list-item--no-margin' : menuIsOpen }"
-            v-for="link in links"
-            :key="link.title"
-            ref="navListItem">
-          <router-link class="nav__list-link" :to="link.target">
-            <span class="nav__list-text">{{link.title}}</span>
-          </router-link>
-        </li>
-      </ul>
-      <div class="nav-hamburger">
-        <HamburgerIcon ref="navHamburger"/>
-      </div>
-      <div class="nav-close" @click="closeMenu">
-        <CloseIcon />
-      </div>
-    </nav>
-  </header>
+  <div>
+    <h1 class="page-logo">
+      <router-link :to="pageLogo.target" ref="pageLogo">
+        {{ pageLogo.title }}
+      </router-link>
+    </h1>
+    <header
+      class="nav-container"
+      ref='nav'
+      @click="openMenu">
+      <nav class="nav">
+        <ul class="nav__list"
+            :class="{ 'nav__list--column' : menuIsOpen }"
+            ref="navList">
+          <li class="nav__list-item"
+            :class="{ 'nav__list-item--no-margin' : menuIsOpen }"
+              v-for="link in links"
+              :key="link.title"
+              ref="navListItem">
+            <router-link class="nav__list-link" :to="link.target">
+              <span class="nav__list-text">{{link.title}}</span>
+            </router-link>
+          </li>
+        </ul>
+        <div class="nav-hamburger">
+          <HamburgerIcon ref="navHamburger"/>
+        </div>
+        <div class="nav-close" @click="closeMenu">
+          <CloseIcon />
+        </div>
+      </nav>
+    </header>
+  </div>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router'
 import debounce from '../../lib/debounce'
 import HamburgerIcon from '../../images/menu.svg'
 import CloseIcon from '../../images/multiply.svg'
@@ -40,11 +48,11 @@ export default {
   },
 	data() {
 		return {
+      pageLogo:{
+        title: 'dolorem',
+        target: '/'
+      },
 			links: [
-        {
-          title: 'dolorem',
-          target: '/'
-        },
 				{
           title: 'lorem',
           target: '/lorem'
@@ -80,21 +88,24 @@ export default {
     }
   },
   created () {
-    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('scroll', this.handleScroll, true)
   },
   mounted() {
     this.setPositionNav()
     window.addEventListener('resize', debounce(this.handleResize, 300))
   },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll);
-    window.removeEventListener('resize', this.handleResize);
-  },
   methods: {
     closeMenu() {
-      console.log('clicked')
-      this.navToHamburger()
-      this.hideNavLinks()
+      console.log('close menu')
+      this.menuIsOpen = false
+      console.log(TweenLite, this.$refs.navList, this.fastAnimationSpeed)
+      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
+        opacity: 0,
+        display: "none",
+        onComplete: () => {
+          console.log('yo')
+        }
+      })
     },
     openMenu() {
       const isClicked = true
@@ -108,21 +119,15 @@ export default {
       this.showNavLinks()
       this.showNavListItems()
     },
-    showNavListItems() {
-      TweenLite.to(
-        this.$refs.navListItem,
-        this.normalAnimationSpeed, { display:'flex' }
-      )
-    },
     handleResize() {
       this.setPositionNav()
 
       if(window.innerWidth <= 675) {
-        this.navToHamburger();
-        this.hideNavLinks();
+        this.navToHamburger()
+        this.hideNavLinks()
       } else {
-        this.navToFullWidth();
-        this.showNavLinks();
+        this.navToFullWidth()
+        this.showNavLinks()
       }
     },
     handleScroll () {
@@ -166,6 +171,10 @@ export default {
         0.1,
         { opacity: 0, display: "none" }
       )
+
+      TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+        color: "white",
+      })
     },
     setPositionNav() {
       this.xPositionNav = this.$refs.nav.offsetWidth
@@ -187,6 +196,10 @@ export default {
         opacity: 1,
         display: "block"
       })
+
+      TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+        color: "black",
+      })
     },
     hideNavLinks() {
       TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
@@ -199,7 +212,13 @@ export default {
         opacity: 1,
         display: "flex"
       })
-    }
+    },
+    showNavListItems() {
+      TweenLite.to(
+        this.$refs.navListItem,
+        this.normalAnimationSpeed, { display:'flex' }
+      )
+    },
   }
 }
 </script>
