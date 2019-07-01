@@ -20,6 +20,9 @@
       <div class="nav-hamburger">
         <HamburgerIcon ref="navHamburger"/>
       </div>
+      <div class="nav-close" @click="closeMenu">
+        <CloseIcon />
+      </div>
     </nav>
   </header>
 </template>
@@ -27,11 +30,13 @@
 <script>
 import debounce from '../../lib/debounce'
 import HamburgerIcon from '../../images/menu.svg'
+import CloseIcon from '../../images/multiply.svg'
 import { TweenLite } from 'gsap'
 
 export default {
   components: {
-    HamburgerIcon
+    HamburgerIcon,
+    CloseIcon
   },
 	data() {
 		return {
@@ -86,6 +91,11 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    closeMenu() {
+      console.log('clicked')
+      this.navToHamburger()
+      this.hideNavLinks()
+    },
     openMenu() {
       const isClicked = true
 

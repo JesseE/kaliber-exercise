@@ -6,6 +6,15 @@
   display: flex;
 }
 
+.nav-close svg {
+  display: block;
+  width: 55px;
+  height: 100%;
+  padding: @spacing-m;
+  fill: @white;
+  opacity: 1;
+}
+
 .nav-hamburger svg {
   display: block;
   width: 65px;
@@ -93,11 +102,11 @@
 }
 
 .nav__list-link:hover > .nav__list-text {
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid @white;
 }
 
 .nav__list-text {
-  color: white;
+  color: @white;
   font-weight: @font-weight-bold;
   font-size: @font-size-s;
   text-transform: uppercase;
