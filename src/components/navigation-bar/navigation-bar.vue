@@ -1,8 +1,8 @@
 <template>
   <div class="nav-container">
-    <h1 class="page-logo">
-      <router-link :to="pageLogo.target" ref="pageLogo">
-        {{ pageLogo.title }}
+    <h1 class="nav-logo">
+      <router-link :to="navLogo.target" ref="navLogo">
+        {{ navLogo.title }}
       </router-link>
     </h1>
 
@@ -52,7 +52,7 @@ export default {
   },
 	data() {
 		return {
-      pageLogo: {
+      navLogo: {
         title: 'dolorem',
         target: '/'
       },
@@ -178,14 +178,15 @@ export default {
     },
     navToHamburger() {
       this.menuIsOpen = false
+      const leftOffset = (window.innerWidth > 1440)
+        ? (this.xPositionNav - 75) + this.pageMargin
+        : ""
 
       TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
         top: 10,
         marginLeft: 0,
         marginRight: 0,
-        left: (window.innerWidth > 1440)
-          ? (this.xPositionNav - 75) + this.pageMargin
-          : "",
+        left: leftOffset,
         right: 10,
         width: 65,
         height: 65,
@@ -229,19 +230,19 @@ export default {
       })
     },
     pageTitleToBlack() {
-      return TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+      return TweenLite.to(this.$refs.navLogo.$el, this.normalAnimationSpeed, {
         color: "black",
       })
     },
     pageTitleToWhite() {
-      return TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+      return TweenLite.to(this.$refs.navLogo.$el, this.normalAnimationSpeed, {
         color: "white",
       })
     },
     closeNavAnimation() {
       TweenLite.to(
         this.$refs.navClose,
-        0.2,
+        this.fastAnimationSpeed,
         {
           top: 0,
           right: 0,
