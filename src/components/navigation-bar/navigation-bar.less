@@ -17,16 +17,20 @@
 }
 
 .nav {
+  display: flex;
+  position: fixed;
   width: @nav-bar-height;
   height: @nav-bar-height;
-  position: fixed;
-
-  display: flex;
   background: black;
   max-width: @page-max-width;
 
-  @media(min-width: @breakpoint-675){
-    margin-left:auto;
+  @media(max-width: @breakpoint-675) {
+    right: 0px;
+    top: 0px;
+  }
+
+  @media(min-width: @breakpoint-675) {
+    margin-left: auto;
     margin-right: auto;
     width: 100%;
     height: @nav-bar-height;

@@ -87,6 +87,7 @@ export default {
       xPositionNav: 0,
       pageMargin: 0,
       navBarHeight: 65,
+      spacingMenu: 10,
       normalAnimationSpeed: 0.3,
       fastAnimationSpeed: 0.2
     }
