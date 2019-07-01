@@ -95,7 +95,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll, true)
   },
   mounted() {
-    this.setPositionNav()
+    if(window.innerWidth >= 675) this.setPositionNav()
     window.addEventListener('resize', debounce(this.handleResize, 300))
   },
   methods: {
