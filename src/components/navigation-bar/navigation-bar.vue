@@ -28,6 +28,7 @@
        @click="closeMenu">
       <CloseIcon ref="navClose" />
     </div>
+
     <div
     class="nav-hamburger"
     :class="{ 'hidden' : menuIsOpen }"
@@ -51,7 +52,7 @@ export default {
   },
 	data() {
 		return {
-      pageLogo:{
+      pageLogo: {
         title: 'dolorem',
         target: '/'
       },
@@ -145,7 +146,6 @@ export default {
         } else if(scrollTarget.offsetTop <= window.scrollY) {
           this.navToHamburger()
           this.hideNavLinks()
-
         }
 
         this.scrollPosition = window.scrollY
@@ -201,7 +201,7 @@ export default {
         height: 65,
         position: 'fixed',
       })
-      console.log(this.$refs.nav)
+
       TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
         opacity: 1,
         top: 10,
