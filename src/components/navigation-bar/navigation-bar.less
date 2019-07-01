@@ -100,11 +100,13 @@
   align-items: center;
   list-style: none;
   padding-left: 0;
-  padding-right: 35px;
   margin: 0;
   width: 100%;
   height: @nav-bar-height;
   justify-content: flex-end;
+  @media(min-width: @breakpoint-675) {
+    padding-right: calc(@spacing-s * 3.5);
+  }
 }
 
 .nav__list--column {
@@ -128,7 +130,7 @@
   display:none;
   width: auto;
   margin: 0 @spacing-s;
-  padding-right: 15px;
+  padding-right: calc(@spacing-s * 1.5);
 
   @media(min-width: @breakpoint-675) {
     display: flex;
