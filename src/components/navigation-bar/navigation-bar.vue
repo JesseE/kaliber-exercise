@@ -6,33 +6,33 @@
       </router-link>
     </h1>
 
-      <nav ref='nav' class="nav" :class="{ 'nav--fullscreen' :menuIsOpen}" >
-        <ul class="nav__list"
-            :class="{ 'nav__list--column' : menuIsOpen }"
-            ref="navList">
-          <li class="nav__list-item"
-            :class="{ 'nav__list-item--no-margin' : menuIsOpen }"
-              v-for="link in links"
-              :key="link.title"
-              ref="navListItem">
-            <router-link class="nav__list-link" :to="link.target">
-              <span class="nav__list-text">{{link.title}}</span>
-            </router-link>
-          </li>
-        </ul>
-      </nav>
+    <nav ref='nav' class="nav" :class="{ 'nav--fullscreen' :menuIsOpen}" >
+      <ul class="nav__list"
+          :class="{ 'nav__list--column' : menuIsOpen }"
+          ref="navList">
+        <li class="nav__list-item"
+          :class="{ 'nav__list-item--no-margin' : menuIsOpen }"
+            v-for="link in links"
+            :key="link.title"
+            ref="navListItem">
+          <router-link class="nav__list-link" :to="link.target">
+            <span class="nav__list-text">{{link.title}}</span>
+          </router-link>
+        </li>
+      </ul>
+    </nav>
 
-     <div
+    <div
       class="nav-close"
       :class="{ 'hidden' : !menuIsOpen }"
-       @click="closeMenu">
+      @click="closeMenu">
       <CloseIcon ref="navClose" />
     </div>
 
     <div
-    class="nav-hamburger"
-    :class="{ 'hidden' : menuIsOpen }"
-    @click="openMenu">
+      class="nav-hamburger"
+      :class="{ 'hidden' : menuIsOpen }"
+      @click="openMenu">
       <HamburgerIcon ref="navHamburger"/>
     </div>
   </div>
@@ -168,19 +168,8 @@ export default {
         }.bind(this)
       })
 
-      TweenLite.to(
-        this.$refs.navClose,
-        0.2,
-        {
-          top: 0,
-          right: 0,
-        }
-      )
-
-      TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
-        color: "white",
-      })
-
+      this.closeNavAnimation()
+      this.pageTitleToWhite()
       this.menuIsOpen = true
     },
     setPositionNav() {
@@ -202,17 +191,8 @@ export default {
         position: 'fixed',
       })
 
-      TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
-        opacity: 1,
-        top: 10,
-        right: 10,
-        position: 'absolute',
-        display: "block"
-      })
-
-      TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
-        color: "black",
-      })
+      this.showHamburgerMenu()
+      this.pageTitleToBlack()
     },
     hideNavLinks() {
       return TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
@@ -238,6 +218,35 @@ export default {
         this.normalAnimationSpeed, { display:'flex' }
       )
     },
+    showHamburgerMenu() {
+      return TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
+        opacity: 1,
+        top: 10,
+        right: 10,
+        position: 'absolute',
+        display: "block"
+      })
+    },
+    pageTitleToBlack() {
+      return TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+        color: "black",
+      })
+    },
+    pageTitleToWhite() {
+      return TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
+        color: "white",
+      })
+    },
+    closeNavAnimation() {
+      TweenLite.to(
+        this.$refs.navClose,
+        0.2,
+        {
+          top: 0,
+          right: 0,
+        }
+      )
+    }
   }
 }
 </script>
