@@ -161,14 +161,13 @@ export default {
       this.xPositionNav = this.$refs.nav.offsetWidth
     },
     navToHamburger() {
-      let leftOffset
       TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
         top: 10,
         marginLeft: 0,
         marginRight: 0,
         left: (window.innerWidth > 1440)
-          ? leftOffset = (this.xPositionNav - 75) + this.pageMargin
-          : leftOffset = "",
+          ? (this.xPositionNav - 75) + this.pageMargin
+          : "",
         right: 10,
         width: 65,
         height: 65,
