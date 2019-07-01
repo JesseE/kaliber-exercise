@@ -1,15 +1,12 @@
 <template>
-  <div>
+  <div class="nav-container">
     <h1 class="page-logo">
       <router-link :to="pageLogo.target" ref="pageLogo">
         {{ pageLogo.title }}
       </router-link>
     </h1>
-    <header
-      class="nav-container"
-      ref='nav'
-      @click="openMenu">
-      <nav class="nav">
+
+      <nav ref='nav' class="nav" :class="{ 'nav--fullscreen' :menuIsOpen}" >
         <ul class="nav__list"
             :class="{ 'nav__list--column' : menuIsOpen }"
             ref="navList">
@@ -23,14 +20,20 @@
             </router-link>
           </li>
         </ul>
-        <div class="nav-hamburger">
-          <HamburgerIcon ref="navHamburger"/>
-        </div>
-        <div class="nav-close" @click="closeMenu">
-          <CloseIcon />
-        </div>
       </nav>
-    </header>
+
+     <div
+      class="nav-close"
+      :class="{ 'hidden' : !menuIsOpen }"
+       @click="closeMenu">
+      <CloseIcon ref="navClose" />
+    </div>
+    <div
+    class="nav-hamburger"
+    :class="{ 'hidden' : menuIsOpen }"
+    @click="openMenu">
+      <HamburgerIcon ref="navHamburger"/>
+    </div>
   </div>
 </template>
 
@@ -96,23 +99,17 @@ export default {
   },
   methods: {
     closeMenu() {
-      console.log('close menu')
       this.menuIsOpen = false
-      console.log(TweenLite, this.$refs.navList, this.fastAnimationSpeed)
-      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
-        opacity: 0,
-        display: "none",
-        onComplete: () => {
-          console.log('yo')
-        }
-      })
+      this.navToHamburger()
+      this.hideNavListItems()
+      this.hideNavLinks()
     },
     openMenu() {
       const isClicked = true
 
       if (window.innerWidth < 675) {
         this.navBarHeight = "100vh"
-        this.menuIsOpen = true;
+        this.menuIsOpen = true
       }
 
       this.navToFullWidth(isClicked)
@@ -131,24 +128,28 @@ export default {
       }
     },
     handleScroll () {
-      if(window.innerWidth > 1440) {
-        const bodyElWidth = document.getElementsByTagName('body')[0].offsetWidth
-        const htmlElWidth = document.getElementsByTagName('html')[0].offsetWidth
-        const pageWidth = htmlElWidth - bodyElWidth
-        this.pageMargin = pageWidth / 2
+      if(window.innerWidth > 675) {
+        if(window.innerWidth > 1440) {
+          const bodyElWidth = document.getElementsByTagName('body')[0].offsetWidth
+          const htmlElWidth = document.getElementsByTagName('html')[0].offsetWidth
+          const pageWidth = htmlElWidth - bodyElWidth
+          this.pageMargin = pageWidth / 2
+        }
+
+        const scrollTarget = document.querySelector('[data-text-block]')
+
+        if(window.scrollY < this.scrollPosition) {
+          this.navToFullWidth()
+          this.showNavLinks()
+          this.showNavListItems()
+        } else if(scrollTarget.offsetTop <= window.scrollY) {
+          this.navToHamburger()
+          this.hideNavLinks()
+
+        }
+
+        this.scrollPosition = window.scrollY
       }
-
-      const scrollTarget = document.querySelector('[data-text-block]')
-
-      if(window.scrollY < this.scrollPosition) {
-        this.navToFullWidth()
-        this.showNavLinks()
-      } else if(scrollTarget.offsetTop <= window.scrollY) {
-        this.navToHamburger()
-        this.hideNavLinks()
-      }
-
-      this.scrollPosition = window.scrollY
     },
     navToFullWidth(isClicked) {
       (!isClicked) ? this.menuIsOpen = false : null
@@ -161,25 +162,33 @@ export default {
         height: this.navBarHeight,
         marginLeft: "auto",
         marginRight: "auto",
+        position: 'relative',
         onComplete: function() {
           this.setPositionNav()
         }.bind(this)
       })
 
       TweenLite.to(
-        this.$refs.navHamburger,
-        0.1,
-        { opacity: 0, display: "none" }
+        this.$refs.navClose,
+        0.2,
+        {
+          top: 0,
+          right: 0,
+        }
       )
 
       TweenLite.to(this.$refs.pageLogo.$el, this.normalAnimationSpeed, {
         color: "white",
       })
+
+      this.menuIsOpen = true
     },
     setPositionNav() {
       this.xPositionNav = this.$refs.nav.offsetWidth
     },
     navToHamburger() {
+      this.menuIsOpen = false
+
       TweenLite.to(this.$refs.nav, this.normalAnimationSpeed, {
         top: 10,
         marginLeft: 0,
@@ -190,10 +199,14 @@ export default {
         right: 10,
         width: 65,
         height: 65,
+        position: 'fixed',
       })
-
+      console.log(this.$refs.nav)
       TweenLite.to(this.$refs.navHamburger, this.normalAnimationSpeed, {
         opacity: 1,
+        top: 10,
+        right: 10,
+        position: 'absolute',
         display: "block"
       })
 
@@ -202,19 +215,25 @@ export default {
       })
     },
     hideNavLinks() {
-      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
+      return TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
         opacity: 0,
         display: "none"
       })
     },
     showNavLinks() {
-      TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
+      return TweenLite.to(this.$refs.navList, this.fastAnimationSpeed, {
         opacity: 1,
         display: "flex"
       })
     },
+    hideNavListItems() {
+      return TweenLite.to(
+        this.$refs.navListItem,
+        this.normalAnimationSpeed, { display:'none' }
+      )
+    },
     showNavListItems() {
-      TweenLite.to(
+      return TweenLite.to(
         this.$refs.navListItem,
         this.normalAnimationSpeed, { display:'flex' }
       )
