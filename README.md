@@ -1,6 +1,6 @@
-# Kaliber exercise
+# KLM exercise
 
-Assignment for kaliber creating an interactive navigation.
+Assignment for KLM
 
 # run project
 
