@@ -29,7 +29,7 @@ export default {
 	},
 	methods: {
 		searchOnFlightNumber() {
-			 getFlightStatus(this.flightNumber, this.airlineCode).then(res => {
+			 getFlightStatus(this.flightNumber, this.airlineCode.toUpperCase()).then(res => {
 				const response = res.data
 				this.$parent.$emit("renderResults", response.operationalFlights)
 			}).catch()
