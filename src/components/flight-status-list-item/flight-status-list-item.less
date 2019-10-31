@@ -1,25 +1,57 @@
 .flight-status-list__item {
   width: 100%;
-  margin: @spacing-s;
+  margin: 0 @spacing-s 1px @spacing-s;
   padding: @spacing-s;
   background: @white;
+  height: min-content;
+
+  &:first-of-type {
+    margin-top: @spacing-s;
+  }
+
   @media(min-width: 768px){
-    margin: @spacing-m;
+    margin: @spacing-s 0 @spacing-s @spacing-s;
     width: 40%;
     max-width: 550px;
-    max-height: 100px;
-  }
-}
-.flight-status-list__item-description {
-  max-width: 800px;
-  width: 100%;
-  margin: @spacing-s;
-  height: auto;
-  background: @white;
-  padding: @spacing-s;
-  @media(min-width: 768px){
-    width: 60%;
-    margin: @spacing-m;
   }
 }
 
+.flight-status-list__item-description {
+  width: 100%;
+  margin: 0 @spacing-s @spacing-s @spacing-s;
+  height: auto;
+  background: @white;
+  padding: @spacing-s;
+
+  @media(min-width: 768px){
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    margin: @spacing-s;
+  }
+}
+
+.flight-status-list__item-is-delayed {
+  width: 100%;
+  background: red;
+  color: white;
+  padding: @spacing-s;
+  text-align: center;
+  margin-left: auto;
+  @media(min-width: 768px) {
+    width: 250px;
+  }
+}
+
+.flight-status-list__item-is-ontime {
+  width: 100%;
+  background: green;
+  color: white;
+  padding: @spacing-s;
+  text-align: center;
+
+  margin-left: auto;
+  @media(min-width: 768px) {
+    width: 250px;
+  }
+}

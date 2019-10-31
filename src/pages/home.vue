@@ -33,9 +33,6 @@ export default {
   mounted() {
     this.getFlightStatusResponses()
   },
-  beforeUpdated() {
-    this.flightStatusResponses = null
-  },
   methods: {
     getFlightStatusResponses() {
       getFlightStatus().then(res => {
@@ -48,9 +45,11 @@ export default {
       let pageNumber = this.page.pageNumber + 1
       const flightNumber = null
       const airlineCode = null
+
       getFlightStatus(flightNumber, airlineCode, pageNumber).then(res => {
         const response = res.data
         this.page = response.page
+        window.scrollTo(0,0)
         return this.flightStatusResponses = response.operationalFlights
       }).catch(err => console.error(err))
     },
@@ -63,6 +62,7 @@ export default {
         getFlightStatus(flightNumber, airlineCode, pageNumber).then(res => {
           const response = res.data
           this.page = response.page
+          window.scrollTo(0,0)
           return this.flightStatusResponses = response.operationalFlights
         }).catch(err => console.error(err))
       }
