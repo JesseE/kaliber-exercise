@@ -1,11 +1,11 @@
 <template>
-  <div class="">
+  <div class="main-content">
     <flight-number-search/>
-    <div class="md-layout md-elevation-1"
+    <div class="flights"
         v-for="(flightStatus, index) in this.flightStatusResponses" :key="index">
       <flight-status-list-item :flightStatus="flightStatus"/>
     </div>
-    <pagination/>
+  <pagination :currentPageNr="this.page.pageNumber"/>
   </div>
 </template>
 
@@ -21,21 +21,55 @@ export default {
   data() {
     return {
       flightStatusResponses: null,
-      page: null
+      page: 0
     }
+  },
+  created() {
+    this.$on('renderResults', this.renderResults)
+    this.$on('resetResults', this.getFlightStatusResponses)
+    this.$on('incrementPageNumber', this.incrementPageNumber)
+    this.$on('decrementPageNumber', this.decrementPageNumber)
   },
   mounted() {
     this.getFlightStatusResponses()
+  },
+  beforeUpdated() {
+    this.flightStatusResponses = null
   },
   methods: {
     getFlightStatusResponses() {
       getFlightStatus().then(res => {
         const response = res.data
-        console.log(response.operationalFlights)
-        this.flightStatusResponses = response.operationalFlights
         this.page = response.page
-      }).catch()
+        return this.flightStatusResponses = response.operationalFlights
+      }).catch(err => console.error(err))
+    },
+    incrementPageNumber() {
+      let pageNumber = this.page.pageNumber + 1
+      const flightNumber = null
+      const airlineCode = null
+      getFlightStatus(flightNumber, airlineCode, pageNumber).then(res => {
+        const response = res.data
+        this.page = response.page
+        return this.flightStatusResponses = response.operationalFlights
+      }).catch(err => console.error(err))
+    },
+    decrementPageNumber() {
+      if(this.page.pageNumber != 0) {
+        let pageNumber = this.page.pageNumber - 1
+        const flightNumber = null
+        const airlineCode = null
+
+        getFlightStatus(flightNumber, airlineCode, pageNumber).then(res => {
+          const response = res.data
+          this.page = response.page
+          return this.flightStatusResponses = response.operationalFlights
+        }).catch(err => console.error(err))
+      }
+    },
+    renderResults(operationalFlights) {
+      return this.flightStatusResponses = operationalFlights
     }
-  },
+  }
 }
 </script>

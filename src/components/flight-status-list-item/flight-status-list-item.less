@@ -1,4 +1,25 @@
-.flight-status-list-item {
-	margin: @spacing-s;
+.flight-status-list__item {
+  width: 100%;
+  margin: @spacing-s;
+  padding: @spacing-s;
+  background: @white;
+  @media(min-width: 768px){
+    margin: @spacing-m;
+    width: 40%;
+    max-width: 550px;
+    max-height: 100px;
+  }
+}
+.flight-status-list__item-description {
+  max-width: 800px;
+  width: 100%;
+  margin: @spacing-s;
+  height: auto;
+  background: @white;
+  padding: @spacing-s;
+  @media(min-width: 768px){
+    width: 60%;
+    margin: @spacing-m;
+  }
 }
 
