@@ -2,7 +2,6 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 250px;
 	background: @klm-blue;
 }
 .flight-search__centerd {
@@ -27,17 +26,22 @@
 		height: 40px;
 		border-radius: @border-radius-s;
 		outline: none;
-		@media (min-width: 768px) {
-			width: 100%;
-		}
+		width: 100%;
+	}
+
+	@media(min-width: 768px) {
+		width: 100%;
 	}
 }
 
 .flight-search__button-group {
 	display: flex;
-	justify-content: space-between;
-	margin: @spacing-m;
+	margin: @spacing-m @spacing-s;
+	justify-content: flex-end;
 
+	& button:first-of-type {
+		margin-right: @spacing-m;
+	}
 	& button {
 		background: @white;
 		color: @klm-blue;
@@ -61,5 +65,16 @@
 			margin-right: @spacing-m;
 		}
 
+	}
+}
+
+.flight-search__label-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	@media(min-width: 768px) {
+		flex-direction: row;
+		justify-content: space-between;
 	}
 }
